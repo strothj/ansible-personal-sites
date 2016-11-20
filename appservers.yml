@@ -4,3 +4,5 @@
   roles:
     - common
     - swapfile
+    - unattended-upgrades
+    - { role: dokku, tags: [ 'dokku' ] }

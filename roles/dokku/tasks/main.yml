@@ -1,0 +1,63 @@
+---
+- name: Disable web configuration
+  debconf:
+    name: dokku
+    question: dokku/web_config
+    value: false
+    vtype: boolean
+
+- name: Enable vhost-based deployment
+  debconf:
+    name: dokku
+    question: dokku/vhost_enable
+    value: true
+    vtype: boolean
+
+- name: Set vhost domain
+  debconf:
+    name: dokku
+    question: dokku/hostname
+    value: "{{ dokku_hostname }}"
+    vtype: string
+
+- name: Install apt-transport-https
+  apt:
+    name: apt-transport-https
+
+- name: Download docker install script
+  get_url:
+    dest: /root/docker.sh
+    group: root
+    mode: "0700"
+    owner: root
+    url: "https://get.docker.com/"
+
+- name: Install docker
+  shell: /root/docker.sh
+  args:
+    creates: /usr/bin/docker 
+
+- name: Add dokku PGP key
+  apt_key:
+    url: "https://packagecloud.io/gpg.key"
+
+- name: Add dokku package server
+  apt_repository:
+    repo: "deb https://packagecloud.io/dokku/dokku/ubuntu/ trusty main"
+
+- name: Add dokku ssh keys
+  template:
+    dest: /root/.ssh/id_rsa.pub
+    group: root
+    mode: "0600"
+    owner: root
+    src: id_rsa.pub.j2
+
+- name: Install dokku
+  apt:
+    name: dokku
+  register: dokku
+
+- name: Install dokku dependencies
+  command: "dokku plugin:install-dependencies --core"
+  when: dokku.changed
