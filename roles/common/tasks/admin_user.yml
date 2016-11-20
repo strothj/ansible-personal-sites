@@ -1,0 +1,29 @@
+---
+- name: Add administrator user's group
+  group:
+    name: "{{ admin_username }}"
+
+- name: Add administrator user
+  user:
+    name: "{{ admin_username }}"
+    group: "{{ admin_username}}"
+    shell: /bin/bash
+
+- name: Make administrator home directory private
+  file:
+    mode: "0700"
+    path: "/home/{{ admin_username }}"
+
+- name: Add SSH key
+  authorized_key:
+    exclusive: yes
+    key: "{{ admin_ssh_public_key }}"
+    user: "{{ admin_username }}"
+
+- name: Grant sudo permission
+  template:
+    dest: "/etc/sudoers.d/{{ admin_username }}"
+    group: root
+    mode: "0400"
+    owner: root
+    src: sudo.j2

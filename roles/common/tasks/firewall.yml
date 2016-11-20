@@ -1,0 +1,20 @@
+---
+- name: Allow ssh
+  ufw:
+    rule: "allow"
+    port: "ssh"
+
+- name: Enable additional firewall ports
+  ufw:
+    rule: "allow"
+    port: "{{ item }}"
+  with_items: "{{ firewall_allowed_ports }}"
+
+- name: Enable firewall
+  ufw:
+    state: enabled
+
+- name: Install fail2ban
+  apt:
+    pkg: fail2ban
+    state: present
