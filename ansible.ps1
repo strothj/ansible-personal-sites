@@ -1,2 +1,9 @@
 $cwd = Convert-Path .
-docker run -it --rm -v ${cwd}:/site -v ${env:USERPROFILE}/.ssh:/root/.ssh -v ${env:USERPROFILE}/.vault_pass:/root/.vault_pass -w /site strothj/ansible
+$vaultPass = [IO.File]::ReadAllText(${env:USERPROFILE} + "/.vault_pass")
+docker run `
+  -it --rm `
+  -v ${cwd}:/site `
+  -v ${env:USERPROFILE}/.ssh:/root/.ssh `
+  -e VAULT_PASS=${vaultPass} `
+  -w /site `
+  strothj/ansible

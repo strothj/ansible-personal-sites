@@ -1,0 +1,4 @@
+---
+- hosts: digitalocean
+  roles:
+    - do_ssh_keys

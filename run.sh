@@ -1,2 +1,2 @@
 #!/bin/bash
-ansible-playbook -i hosts --vault-password-file ~/.vault_pass -u $@ site.yml
+ansible-playbook -i hosts/hosts --vault-password-file ~/.vault_pass -u $@ playbooks/sites.yml

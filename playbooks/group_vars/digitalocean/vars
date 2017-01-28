@@ -1,0 +1,4 @@
+---
+do_token: "{{ vault_do_token }}"
+do_sshkey_name: "{{ vault_do_sshkey_name }}"
+do_sshkey: "{{ vault_do_sshkey }}"

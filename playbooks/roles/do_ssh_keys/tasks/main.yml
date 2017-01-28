@@ -1,0 +1,8 @@
+---
+- name: Ensure SSH key exists
+  digital_ocean:
+    api_token: "{{ do_token }}"
+    command: ssh
+    name: "{{ do_sshkey_name }}"
+    state: present
+    ssh_pub_key: "{{ do_sshkey }}"
